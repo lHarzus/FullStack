@@ -1,0 +1,6 @@
+{
+    "mongoURI" : "mongodb+srv://rubnitos:panasonic@cluster0.dsrrttg.mongodb.net/?retryWrites=true&w=majority",
+    "jwtSecret" : "mysecrettoken",
+    "githubClientId" : "dc0530f1689713fba93f",
+    "githubSecret": "f0f728e90a4122712d26ed4dbb157977c8fc6b38"
+}
