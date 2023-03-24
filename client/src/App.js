@@ -1,17 +1,36 @@
 import './App.css';
-import React, {Fragment} from 'react';
-import {BrowserRouter as Router, Routes, Route, Navigator} from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
-import Register from './components/layout/auth/Register';
-import Login  from './components/layout/auth/Login';
+import Register from './components/auth/Register';
+import Login  from './components/auth/Login';
 import Alert from './components/layout/Alert';
+import Dashboard from './components/dashboard/Dashboard';
+import PrivateRoute from './components/routing/PrivateRoute';
+import CreateProfile from './components/profile-forms.js/CreateProfile';
+import EditProfile from './components/profile-forms.js/EditProfile';
+import AddExperience from './components/profile-forms.js/AddExperience';
+import AddEducation from './components/profile-forms.js/AddEducation';
+import Profiles from './components/profiles/Profiles';
+import Profile from './components/profile/Profile';
+import Posts from './components/posts/Posts';
 //Redux
 import { Provider } from 'react-redux';
 import store from './store';
+import { loadUser } from './actions/auth';
+import setAuthToken from './utils/setAuthToken';
 
+if(localStorage.token){
+  setAuthToken(localStorage.token);
+}
 
-const App = () => (
+const App = () => {
+  useEffect(()=> {
+    store.dispatch(loadUser());
+  }, []); //empty array to make it only run once
+  
+  return(
     <Provider store={store}>
       <Router>
         <Navbar/>
@@ -23,10 +42,42 @@ const App = () => (
               <Routes>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/register" element={<Register/>}/>
+                <Route path="/profiles" element={<Profiles/>}/>
+                <Route path="/profile/:id" element={<Profile/>}/>
+                <Route path="/dashboard" element={
+                  <PrivateRoute>
+                    <Dashboard />
+                  </PrivateRoute>
+                } />
+                <Route path="/create-profile" element={
+                  <PrivateRoute>
+                    <CreateProfile />
+                  </PrivateRoute>
+                } />
+                <Route path="/edit-profile" element={
+                  <PrivateRoute>
+                    <EditProfile />
+                  </PrivateRoute>
+                } />
+                <Route path="/add-experience" element={
+                  <PrivateRoute>
+                    <AddExperience />
+                  </PrivateRoute>
+                } />
+                <Route path="/add-education" element={
+                  <PrivateRoute>
+                    <AddEducation/>
+                  </PrivateRoute>
+                } />
+                <Route path="/posts" element={
+                  <PrivateRoute>
+                    <Posts/>
+                  </PrivateRoute>
+                } />
               </Routes>
             </section>
       </Router>
     </Provider>
-);
+)};
 
 export default App;
